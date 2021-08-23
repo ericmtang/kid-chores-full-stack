@@ -1,0 +1,137 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require("../app");
+var debug = require("debug")("nucampsiteserver:server");
+var http = require("http");
+var socketapi = require("../socketapi");
+
+const https = require("https");
+const fs = require("fs");
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || "3000");
+app.set("port", port);
+app.set("secPort", port + 443);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+var wsserver = http.createServer(app);
+wsserver.listen(port + 1);
+var io = require("socket.io")(wsserver, { rejectUnauthorized: false });
+io.on("connection", function (socket) {
+  console.log(`connection established via id: ${socket.id}`);
+  socket.on("chores", (data) => {
+    console.log("chores socket connection success:", data);
+    socket.broadcast.emit("chores", { id: "WS CHORE Response" });
+  });
+  socket.on("behaviors", (data) => {
+    console.log("behaviors socket connection success:", data);
+    socket.broadcast.emit("behaviors", { id: "WS BEHAVIOR Response" });
+  });
+  socket.on("rewards", (data) => {
+    console.log("rewards socket connection success:", data);
+    socket.broadcast.emit("rewards", { id: "WS REWARD Response" });
+  });
+  socket.on("points", (data) => {
+    console.log("points socket connection success:", data);
+    socket.broadcast.emit("points", { id: "WS POINTS Response" });
+  });
+});
+//var io = socketapi.io;
+//io.attach(server);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on("error", onError);
+server.on("listening", onListening);
+
+/**
+ * Create HTTPS server.
+ */
+
+const options = {
+  key: fs.readFileSync(__dirname + "/server.key"),
+  cert: fs.readFileSync(__dirname + "/server.cert"),
+};
+
+const secureServer = https.createServer(options, app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+secureServer.listen(app.get("secPort"), () => {
+  console.log("Server listening on port", app.get("secPort"));
+});
+secureServer.on("error", onError);
+secureServer.on("listening", onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== "listen") {
+    throw error;
+  }
+
+  var bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  debug("Listening on " + bind);
+}
