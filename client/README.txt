@@ -1,9 +1,15 @@
 README
 
-This project was created as practice working with React Native and Redux for my NuCamp coding bootcamp Front End course series. I wanted to have the project to have a practical application. Keeping track of my child's behavior / consquences was hard to do day in and day out, so I decided to create an app to do this. 
+This project was created as practice working with the MERN stack (using React Native) for my NuCamp coding bootcamp Full Stack course series. I wanted to have the project to have a practical application. Keeping track of my child's behavior / consquences was hard to do day in and day out, so I decided to create an app to do this. 
 
 Technologies / Modules used:
-- React Native and Redux (with Persist)
+- React Native 
+- Node
+- Express 
+- Mongo / Mongoose
+- Redux (with Persist)
+- Websockets (Socket.io)
+- RESTful Web Services
 
 Possible Future Enhancements:
 - More graphics / icons
