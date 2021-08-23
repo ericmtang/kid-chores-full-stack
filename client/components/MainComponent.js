@@ -164,7 +164,7 @@ const ChildBehavior = createMaterialTopTabNavigator(
 
 const ParentBehavior = createMaterialTopTabNavigator(
   {
-    Assign: {
+    Select: {
       screen: BehaviorChooser,
     },
     Pending: {
@@ -204,13 +204,13 @@ const ParentNavigator = createMaterialTopTabNavigator(
     ChoreList: {
       screen: ParentChores,
       navigationOptions: {
-        tabBarLabel: "Chore List",
+        tabBarLabel: "Chores",
       },
     },
     BehaviorList: {
       screen: ParentBehavior,
       navigationOptions: {
-        tabBarLabel: "Behavior List",
+        tabBarLabel: "Behaviors",
       },
     },
     Settings: {

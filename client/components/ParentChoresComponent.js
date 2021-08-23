@@ -3,13 +3,18 @@ import { FlatList, StyleSheet, Text, View, ScrollView } from "react-native";
 import { Card, CheckBox } from "react-native-elements";
 import { CHORES } from "../shared/chores";
 import { useSelector, useDispatch } from "react-redux";
-import { completeChore, updateChore, fetchChores } from "../redux/ActionCreators";
+import {
+  completeChore,
+  updateChore,
+  fetchChores,
+} from "../redux/ActionCreators";
 import ListItemSwipeable from "react-native-elements/dist/list/ListItemSwipeable";
 import socket from "./WebSocketComponent";
 
 export default function ParentChores() {
   // const [chores, setChores] = useState(CHORES);
-  const chores = useSelector((state) => state.Chores.chores.filter((obj)=>obj.user==state.Family.activeChild));
+  const chores = useSelector((state) => state.Chores.chores);
+  //const chores = useSelector((state) => state.Chores.chores.filter((obj)=>obj.user==state.Family.activeChild));
   const dispatch = useDispatch();
   console.log("ParentChoresSelector:", chores.length);
   // useEffect(() => {
